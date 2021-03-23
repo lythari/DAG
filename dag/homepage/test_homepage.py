@@ -8,8 +8,8 @@ import pytest
 URL = ''
 
 
-@pytest.fixture(scope='module')
-def response():
+@pytest.fixture(scope='function')
+def response(db):
     return Client().get(URL)
 
 
@@ -28,6 +28,7 @@ def test_homepage_rendering(response):
     assert b'It Works !' in response.content
 
 
+@pytest.mark.django_db
 def test_homepage_speed(client):
     start_time = time.perf_counter()
     _ = client.get(URL)
