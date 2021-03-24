@@ -41,5 +41,5 @@ def test_navbar_context_processor(response):
 @pytest.mark.django_db
 def test_navbar_allow_rendering(response_with_nav):
     assert isinstance(response_with_nav, HttpResponse)
-    assert b'<nav id="navigation" class="H">' in response_with_nav.content
+    assert b'<nav id="navigation"' in response_with_nav.content
 
