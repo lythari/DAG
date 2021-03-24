@@ -131,3 +131,4 @@ dmypy.json
 #PyCharm
 .idea/
 /dag/static/
+/dag/requirements.txt
