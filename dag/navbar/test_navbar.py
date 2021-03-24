@@ -13,7 +13,7 @@ def simple_response(db):
     bar = navbar_models.Navbar.objects.create(
         state=True, position='H'
     )
-    link = navbar_models.Link.objects.create(
+    _ = navbar_models.Link.objects.create(
         name="test", position=1, bar=bar
     )
     return Client().get(URL)
@@ -80,4 +80,3 @@ def test_navbar_render_depend_on_position(response_with_nav, position, position_
     print(templates)
     print(expected_templates)
     assert all(a in templates for a in expected_templates)
-
