@@ -132,3 +132,4 @@ dmypy.json
 .idea/
 /dag/static/
 /dag/requirements.txt
+/dag/coverage/
