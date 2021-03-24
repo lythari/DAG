@@ -1,0 +1,9 @@
+<div class="col-3">
+    <nav id="navigation" class="nav flex-column {{ nav_class }}" >
+        <div class="navbar-nav">
+            {% for link in nav_links %}
+                {{ link.render }}
+            {% endfor %}
+        </div>
+    </nav>
+</div>
