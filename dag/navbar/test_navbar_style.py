@@ -18,11 +18,6 @@ def response_with_nav(db):
     return gen_response
 
 
-@pytest.fixture(scope='function')
-def response(db):
-    return Client().get(URL)
-
-
 @pytest.mark.django_db
 @pytest.mark.parametrize("position", ['H', 'VL', 'VC'])
 def test_navbar_style_noreg(position):
@@ -36,7 +31,6 @@ def test_navbar_style_noreg(position):
 @pytest.mark.parametrize("style,classe", list(navbar_models.Navbar.STYLE_CHOICES))
 def test_navbar_style_renders(response_with_nav, style, classe):
     response = response_with_nav(style)
-    print(response.content)
     assert isinstance(response, HttpResponse)
     assert b'<nav id="navigation"' in response.content
     assert bytes(classe, 'ASCII') in response.content

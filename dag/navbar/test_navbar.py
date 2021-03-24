@@ -77,6 +77,4 @@ def test_navbar_render_depend_on_position(response_with_nav, position, position_
         navbar_models.Navbar.template_name.get(position_name),
     ]
     templates = [t.name for t in response.templates]
-    print(templates)
-    print(expected_templates)
     assert all(a in templates for a in expected_templates)
