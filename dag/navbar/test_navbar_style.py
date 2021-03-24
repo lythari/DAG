@@ -11,7 +11,7 @@ URL = ''
 @pytest.fixture(scope='function')
 def response_with_nav(db):
     def gen_response(style):
-        bar = navbar_models.Navbar.objects.create(
+        _ = navbar_models.Navbar.objects.create(
             state=True, position='H', style=style
         )
         return Client().get(URL)
@@ -25,12 +25,10 @@ def response(db):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("position", ['H', 'VL', 'VC'])
-def test_navbar_style_works(position):
+def test_navbar_style_noreg(position):
     bar = navbar_models.Navbar.objects.create(
         state=True, position=position, style=1
     )
-    h_bar = navbar_models.Navbar.objects.filter(state=True).first()
-    assert bar == h_bar
     assert bar.position == position
 
 
