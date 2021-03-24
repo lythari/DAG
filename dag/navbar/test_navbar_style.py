@@ -34,7 +34,7 @@ def test_navbar_style_noreg(position):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("style,classe", list(navbar_models.Navbar.STYLE_CHOICES))
-def test_navbar_style_renders(response_with_nav,style,classe):
+def test_navbar_style_renders(response_with_nav, style, classe):
     response = response_with_nav(style)
     print(response.content)
     assert isinstance(response, HttpResponse)
