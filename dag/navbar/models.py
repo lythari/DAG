@@ -4,24 +4,34 @@ from django.template.loader import get_template
 
 
 class Navbar(models.Model):
-    CHOICES = (
+    POSITION_CHOICES = (
         ('VL', 'Vertical Left'),
         ('VR', 'Vertical Right'),
         ('H', 'Horizontal'),
     )
+    STYLE_CHOICES = (
+        (1, 'navbar-light bg-light'),
+        (2, 'navbar-dark bg-dark'),
+        (3, 'navbar-dark bg-primary'),
+    )
     state = models.BooleanField(default=False, verbose_name="Active")
-    position = models.CharField(max_length=64, choices=CHOICES)
+    position = models.CharField(max_length=64, choices=POSITION_CHOICES)
+    style = models.IntegerField(choices=STYLE_CHOICES, default=1)
 
-    template_name = 'navbar/navbar.html'
+    template_name = {
+        'Horizontal': 'navbar/navbar.html',
+        'Vertical Left': 'navbar/navbar_left.html',
+        'Vertical Right': 'navbar/navbar_right.html'
+    }
 
     def get_context_data(self):
         return {
-            "nav_class":     self.position,
+            "nav_class":     self.get_style_display(),
             "nav_links": self.link_set.all(),
         }
 
     def render(self):
-        return get_template(self.template_name).render(context=self.get_context_data())
+        return get_template(self.template_name[self.get_position_display()]).render(context=self.get_context_data())
 
     class Meta:
         verbose_name = "Barre de navigation"

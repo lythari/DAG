@@ -12,5 +12,5 @@ class LinksInline(admin.TabularInline):
 @admin.register(navbar_models.Navbar)
 class NavbarAdmin(admin.ModelAdmin):
     list_filter = ('state',)
-    list_display = ('state', 'position')
+    list_display = ('state', 'position', 'style')
     inlines = [LinksInline]
