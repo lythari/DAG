@@ -10,13 +10,12 @@ URL = ''
 
 @pytest.fixture(scope='function')
 def response_with_nav(db):
-    bar = navbar_models.Navbar.objects.create(
-        state=True, position='H', style=1
-    )
-    link = navbar_models.Link.objects.create(
-        name="test", position=1, bar=bar
-    )
-    return Client().get(URL)
+    def gen_response(style):
+        bar = navbar_models.Navbar.objects.create(
+            state=True, position='H', style=style
+        )
+        return Client().get(URL)
+    return gen_response
 
 
 @pytest.fixture(scope='function')
@@ -25,25 +24,21 @@ def response(db):
 
 
 @pytest.mark.django_db
-def test_navbar_style_works():
+@pytest.mark.parametrize("position", ['H', 'VL', 'VC'])
+def test_navbar_style_works(position):
     bar = navbar_models.Navbar.objects.create(
-        state=True, position='H', style=1
+        state=True, position=position, style=1
     )
     h_bar = navbar_models.Navbar.objects.filter(state=True).first()
     assert bar == h_bar
+    assert bar.position == position
 
 
 @pytest.mark.django_db
-def test_navbar_style_works_vertically():
-    bar = navbar_models.Navbar.objects.create(
-        state=True, position='VL', style=1
-    )
-    v_bar = navbar_models.Navbar.objects.filter(state=True).first()
-    assert bar == v_bar
-
-
-@pytest.mark.django_db
-def test_navbar_style_renders(response_with_nav):
-    assert isinstance(response_with_nav, HttpResponse)
-    assert b'<nav id="navigation"' in response_with_nav.content
-    assert b'navbar-light bg-light' in response_with_nav.content
+@pytest.mark.parametrize("style,classe", list(navbar_models.Navbar.STYLE_CHOICES))
+def test_navbar_style_renders(response_with_nav,style,classe):
+    response = response_with_nav(style)
+    print(response.content)
+    assert isinstance(response, HttpResponse)
+    assert b'<nav id="navigation"' in response.content
+    assert bytes(classe, 'ASCII') in response.content
